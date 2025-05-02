@@ -1,0 +1,28 @@
+{
+  "name": "my-links",
+  "version": "1.0.0",
+  "description": "Una página web sencilla estilo Linktree para mostrar enlaces a tus redes sociales, eventos y más.",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/galaterro/my-links.git"
+  },
+  "keywords": [
+    "mylinks",
+    "linktree",
+    "urls"
+  ],
+  "author": "@Galaterro",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/galaterro/my-links/issues"
+  },
+  "homepage": "https://github.com/galaterro/my-links#readme",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.5",
+    "tailwindcss": "^4.1.5"
+  }
+}
