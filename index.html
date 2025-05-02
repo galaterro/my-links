@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Enlaces</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-gray-100 to-gray-200 min-h-screen py-10 px-4">
+    <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl mb-8">
+        <div class="p-8 text-center">
+            <img id="profileImage" class="h-24 w-24 rounded-full mx-auto mb-4" src="https://via.placeholder.com/150" alt="Foto de perfil">
+            <h1 id="profileName" class="text-xl font-bold font-mono text-gray-800 mb-2">@Galaterro</h1>
+            <p id="profileDescription" class="text-sm text-gray-600 mb-6">Descripción breve</p>
+            
+            <div id="linksContainer" class="space-y-3">
+                <!-- Los enlaces se cargarán dinámicamente desde links.json -->
+            </div>
+        </div>
+    </div>
+    
+    <footer class="text-center text-gray-500 text-xs">
+        <p>© <span id="currentYear"></span></p>
+    </footer>
+
+    <script>
+        // Set current year in footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        // Función para cargar los enlaces desde el archivo JSON
+        async function loadLinks() {
+            try {
+                const response = await fetch('links.json');
+                const data = await response.json();
+                
+                // Actualizar perfil
+                if (data.profile) {
+                    document.getElementById('profileName').textContent = data.profile.name || 'Nombre';
+                    document.getElementById('profileDescription').textContent = data.profile.description || 'Descripción breve';
+                    if (data.profile.image) {
+                        document.getElementById('profileImage').src = data.profile.image;
+                    }
+                }
+                
+                // Crear los enlaces
+                const linksContainer = document.getElementById('linksContainer');
+                
+                if (data.links && Array.isArray(data.links)) {
+                    data.links.forEach(link => {
+                        const linkElement = document.createElement('a');
+                        linkElement.href = link.url;
+                        linkElement.target = "_blank";
+                        linkElement.rel = "noopener noreferrer";
+                        linkElement.className = "block w-full py-3 px-4 bg-gray-800 hover:bg-gray-700 transition-colors rounded-lg text-white font-medium text-center";
+                        
+                        // Si hay un icono, añadirlo
+                        if (link.icon) {
+                            const icon = document.createElement('span');
+                            icon.className = "mr-2";
+                            icon.innerHTML = link.icon;
+                            linkElement.prepend(icon);
+                        }
+                        
+                        linkElement.appendChild(document.createTextNode(link.title));
+                        linksContainer.appendChild(linkElement);
+                    });
+                }
+            } catch (error) {
+                console.error('Error cargando los enlaces:', error);
+                const linksContainer = document.getElementById('linksContainer');
+                linksContainer.innerHTML = '<p class="text-red-500">Error al cargar los enlaces. Verifica que el archivo links.json existe y es válido.</p>';
+            }
+        }
+        
+        // Cargar enlaces cuando el documento esté listo
+        document.addEventListener('DOMContentLoaded', loadLinks);
+    </script>
+</body>
+</html>
