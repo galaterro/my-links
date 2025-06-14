@@ -32,6 +32,16 @@
                     "title": "Spotify",
                     "url": "https://open.spotify.com/user/galaterro?si=e9a9d15bad404a3b",
                     "icon": "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewBox='0 0 16 16'><path d='M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.669 11.538a.498.498 0 0 1-.686.165c-1.879-1.147-4.243-1.407-7.028-.77a.499.499 0 0 1-.222-.973c3.048-.696 5.662-.397 7.77.892a.5.5 0 0 1 .166.686zm.979-2.178a.624.624 0 0 1-.858.205c-2.15-1.321-5.428-1.704-7.972-.932a.625.625 0 0 1-.362-1.194c2.905-.881 6.517-.454 8.986 1.063a.624.624 0 0 1 .206.858zm.084-2.268C10.154 5.56 5.9 5.419 3.438 6.166a.748.748 0 1 1-.434-1.432c2.825-.857 7.523-.692 10.492 1.07a.747.747 0 1 1-.764 1.288z'/></svg>"
+                },
+                {
+                    "title": "Playlist: Música Disco / Funk",
+                    "url": "https://open.spotify.com/playlist/0dqa9qQPaRRF58oHFpg8rf?si=35bf72596e8b49c0",
+                    "icon": "<svg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'>\n  <circle cx='8' cy='9' r='6' fill='#E0E0E0' stroke='#888' stroke-width='0.5'/>\n  <rect x='7.25' y='2' width='1.5' height='3' rx='0.75' fill='#888'/>\n  <ellipse cx='8' cy='9' rx='5.5' ry='5.5' fill='none' stroke='#B0B0B0' stroke-width='0.3'/>\n  <path d='M3 9h10M8 3v12M5.5 5.5l5 7M10.5 5.5l-5 7' stroke='#888' stroke-width='0.3'/>\n  <circle cx='8' cy='9' r='0.5' fill='#888'/>\n</svg>"
+                },
+                {
+                    "title": "Lady Luck - Winchester Gang",
+                    "url": "https://www.youtube.com/watch?v=a5jNt-gI8qs",
+                    "icon": "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-music-note' viewBox='0 0 16 16'><path d='M9 13c0 1.105-1.12 2-2.5 2S4 14.105 4 13s1.12-2 2.5-2 2.5.895 2.5 2'/><path fill-rule='evenodd' d='M9 3v10H8V3z'/><path d='M8 2.82a1 1 0 0 1 .804-.98l3-.6A1 1 0 0 1 13 2.22V4L8 5z'/></svg>"
                 }
             ]
         }
