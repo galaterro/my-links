@@ -1,48 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mis Enlaces</title>
-    <link rel="stylesheet" href="output.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">    <style id="dynamicStyles">
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        /* Dynamic styles will be inserted here via JavaScript */
+    <link rel="stylesheet" href="output.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style id="dynamicStyles">
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      /* Dynamic styles will be inserted here via JavaScript */
     </style>
-</head>
-<body id="mainBody" class="min-h-screen py-10 px-4">
-    <div id="mainContainer" class="max-w-md mx-auto rounded-xl shadow-lg overflow-hidden md:max-w-2xl mb-8">
-        <div class="p-8 text-center">
-            <img id="profileImage" class="h-24 w-24 rounded-full mx-auto mb-4" src="https://via.placeholder.com/150" alt="Foto de perfil">
-            <h1 id="profileName" class="text-xl font-bold font-mono mb-2">@Galaterro</h1>
-            <p id="profileDescription" class="text-sm mb-6">Descripción breve</p>
-            
-            <div id="categoriesContainer">
-                <!-- Las categorías se cargarán dinámicamente desde links.json -->
-            </div>
+  </head>
+  <body id="mainBody" class="min-h-screen py-10 px-4">
+    <div
+      id="mainContainer"
+      class="max-w-md mx-auto rounded-xl shadow-lg overflow-hidden md:max-w-2xl mb-8"
+    >
+      <div class="p-8 text-center">
+        <img
+          id="profileImage"
+          class="h-24 w-24 rounded-full mx-auto mb-4"
+          src="https://via.placeholder.com/150"
+          alt="Foto de perfil"
+        />
+        <h1 id="profileName" class="text-xl font-bold font-mono mb-2">
+          @Galaterro
+        </h1>
+        <p id="profileDescription" class="text-sm mb-6">Descripción breve</p>
+
+        <div id="categoriesContainer">
+          <!-- Las categorías se cargarán dinámicamente desde links.json -->
         </div>
-    </div>    
+      </div>
+    </div>
     <footer id="footer" class="text-center text-xs">
-        <p>© <span id="currentYear"></span></p>
-    </footer>    <script>
-        // Set current year in footer
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
-        
-        // Function to apply dynamic theme colors
-        function applyTheme(theme) {
-            const dynamicStyles = document.getElementById('dynamicStyles');
-            const primaryColor = theme.primaryColor || '#1f2937';
-            const accentColor = theme.accentColor || '#3b82f6';
-            const textColor = theme.textColor || '#ffffff';
-            
-            // Calculate lighter and darker shades
-            const primaryColorLight = lightenColor(primaryColor, 20);
-            const accentColorHover = lightenColor(accentColor, 10);
-            const textColorMuted = lightenColor(textColor, -30);
-            
-            const css = `
+      <p>
+        <a
+          href="https://github.com/galaterro/my-links"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center space-x-1 hover:opacity-80 transition-opacity text-xs"
+        >
+          © <span id="currentYear"></span> - Hecho con ❤️ por
+          <strong>Galaterro</strong>
+        </a>
+      </p>
+    </footer>
+    <script>
+      // Set current year in footer
+      document.getElementById("currentYear").textContent =
+        new Date().getFullYear();
+
+      // Function to apply dynamic theme colors
+      function applyTheme(theme) {
+        const dynamicStyles = document.getElementById("dynamicStyles");
+        const primaryColor = theme.primaryColor || "#1f2937";
+        const accentColor = theme.accentColor || "#3b82f6";
+        const textColor = theme.textColor || "#ffffff";
+
+        // Calculate lighter and darker shades
+        const primaryColorLight = lightenColor(primaryColor, 20);
+        const accentColorHover = lightenColor(accentColor, 10);
+        const textColorMuted = lightenColor(textColor, -30);
+
+        const css = `
                 body {
                     font-family: 'Inter', sans-serif;
                     background: linear-gradient(135deg, ${primaryColorLight} 0%, ${primaryColor} 100%);
@@ -88,143 +114,156 @@
                     color: ${textColorMuted};
                 }
             `;
-            
-            dynamicStyles.innerHTML = css;
-        }
-        
-        // Function to lighten or darken a color
-        function lightenColor(color, amount) {
-            const usePound = color[0] === '#';
-            const col = usePound ? color.slice(1) : color;
-            const num = parseInt(col, 16);
-            let r = (num >> 16) + amount;
-            let g = (num >> 8 & 0x00FF) + amount;
-            let b = (num & 0x0000FF) + amount;
-            r = r > 255 ? 255 : r < 0 ? 0 : r;
-            g = g > 255 ? 255 : g < 0 ? 0 : g;
-            b = b > 255 ? 255 : b < 0 ? 0 : b;
-            return (usePound ? '#' : '') + (r << 16 | g << 8 | b).toString(16).padStart(6, '0');
-        }
-        
-        // Function to load links from JSON file
-        async function loadLinks() {
-            try {
-                const response = await fetch('links.json');
-                const data = await response.json();
-                
-                // Apply theme if available
-                if (data.theme) {
-                    applyTheme(data.theme);
-                }
-                
-                // Update profile
-                if (data.profile) {
-                    document.getElementById('profileName').textContent = data.profile.name || 'Nombre';
-                    document.getElementById('profileDescription').textContent = data.profile.description || 'Descripción breve';
-                    if (data.profile.image) {
-                        document.getElementById('profileImage').src = data.profile.image;
-                    }
-                }
-                
-                // Create categories and links
-                const categoriesContainer = document.getElementById('categoriesContainer');
-                
-                // Handle new categories structure
-                if (data.categories && Array.isArray(data.categories)) {
-                    data.categories.forEach((category, categoryIndex) => {
-                        // Create category container
-                        const categoryDiv = document.createElement('div');
-                        categoryDiv.className = 'mb-8';
-                        
-                        // Create category title
-                        if (category.title) {
-                            const categoryTitle = document.createElement('h2');
-                            categoryTitle.className = 'category-title text-lg font-semibold mb-4 pb-2';
-                            categoryTitle.textContent = category.title;
-                            categoryDiv.appendChild(categoryTitle);
-                        }
-                        
-                        // Create links container for this category
-                        const linksContainer = document.createElement('div');
-                        linksContainer.className = 'space-y-3';
-                        
-                        // Create links for this category
-                        if (category.links && Array.isArray(category.links)) {
-                            category.links.forEach(link => {
-                                const linkElement = document.createElement('a');
-                                linkElement.href = link.url;
-                                linkElement.target = "_blank";
-                                linkElement.rel = "noopener noreferrer";
-                                linkElement.className = "link-button block w-full py-3 px-4 rounded-lg font-medium text-center flex items-center justify-center";
-                                
-                                // If there's an icon, add it
-                                if (link.icon) {
-                                    const icon = document.createElement('span');
-                                    icon.className = "mr-2 flex-shrink-0";
-                                    icon.innerHTML = link.icon;
-                                    linkElement.appendChild(icon);
-                                }
-                                
-                                // Add title text
-                                const titleSpan = document.createElement('span');
-                                titleSpan.textContent = link.title;
-                                linkElement.appendChild(titleSpan);
-                                
-                                linksContainer.appendChild(linkElement);
-                            });
-                        }
-                        
-                        categoryDiv.appendChild(linksContainer);
-                        
-                        // Add divider between categories (except for the last one)
-                        if (categoryIndex < data.categories.length - 1) {
-                            const divider = document.createElement('hr');
-                            divider.className = 'category-divider my-6 border-0 h-px';
-                            categoryDiv.appendChild(divider);
-                        }
-                        
-                        categoriesContainer.appendChild(categoryDiv);
-                    });
-                }
-                // Fallback: Handle old structure with direct links array
-                else if (data.links && Array.isArray(data.links)) {
-                    const linksContainer = document.createElement('div');
-                    linksContainer.className = 'space-y-3';
-                    
-                    data.links.forEach(link => {
-                        const linkElement = document.createElement('a');
-                        linkElement.href = link.url;
-                        linkElement.target = "_blank";
-                        linkElement.rel = "noopener noreferrer";
-                        linkElement.className = "link-button block w-full py-3 px-4 rounded-lg font-medium text-center flex items-center justify-center";
-                        
-                        // If there's an icon, add it
-                        if (link.icon) {
-                            const icon = document.createElement('span');
-                            icon.className = "mr-2 flex-shrink-0";
-                            icon.innerHTML = link.icon;
-                            linkElement.appendChild(icon);
-                        }
-                        
-                        // Add title text
-                        const titleSpan = document.createElement('span');
-                        titleSpan.textContent = link.title;
-                        linkElement.appendChild(titleSpan);
-                        
-                        linksContainer.appendChild(linkElement);
-                    });
-                    
-                    categoriesContainer.appendChild(linksContainer);
-                }
-            } catch (error) {
-                console.error('Error cargando los enlaces:', error);
-                const categoriesContainer = document.getElementById('categoriesContainer');
-                categoriesContainer.innerHTML = '<p class="text-red-500">Error al cargar los enlaces. Verifica que el archivo links.json existe y es válido.</p>';
+
+        dynamicStyles.innerHTML = css;
+      }
+
+      // Function to lighten or darken a color
+      function lightenColor(color, amount) {
+        const usePound = color[0] === "#";
+        const col = usePound ? color.slice(1) : color;
+        const num = parseInt(col, 16);
+        let r = (num >> 16) + amount;
+        let g = ((num >> 8) & 0x00ff) + amount;
+        let b = (num & 0x0000ff) + amount;
+        r = r > 255 ? 255 : r < 0 ? 0 : r;
+        g = g > 255 ? 255 : g < 0 ? 0 : g;
+        b = b > 255 ? 255 : b < 0 ? 0 : b;
+        return (
+          (usePound ? "#" : "") +
+          ((r << 16) | (g << 8) | b).toString(16).padStart(6, "0")
+        );
+      }
+
+      // Function to load links from JSON file
+      async function loadLinks() {
+        try {
+          const response = await fetch("links.json");
+          const data = await response.json();
+
+          // Apply theme if available
+          if (data.theme) {
+            applyTheme(data.theme);
+          }
+
+          // Update profile
+          if (data.profile) {
+            document.getElementById("profileName").textContent =
+              data.profile.name || "Nombre";
+            document.getElementById("profileDescription").textContent =
+              data.profile.description || "Descripción breve";
+            if (data.profile.image) {
+              document.getElementById("profileImage").src = data.profile.image;
             }
+          }
+
+          // Create categories and links
+          const categoriesContainer = document.getElementById(
+            "categoriesContainer"
+          );
+
+          // Handle new categories structure
+          if (data.categories && Array.isArray(data.categories)) {
+            data.categories.forEach((category, categoryIndex) => {
+              // Create category container
+              const categoryDiv = document.createElement("div");
+              categoryDiv.className = "mb-8";
+
+              // Create category title
+              if (category.title) {
+                const categoryTitle = document.createElement("h2");
+                categoryTitle.className =
+                  "category-title text-lg font-semibold mb-4 pb-2";
+                categoryTitle.textContent = category.title;
+                categoryDiv.appendChild(categoryTitle);
+              }
+
+              // Create links container for this category
+              const linksContainer = document.createElement("div");
+              linksContainer.className = "space-y-3";
+
+              // Create links for this category
+              if (category.links && Array.isArray(category.links)) {
+                category.links.forEach((link) => {
+                  const linkElement = document.createElement("a");
+                  linkElement.href = link.url;
+                  linkElement.target = "_blank";
+                  linkElement.rel = "noopener noreferrer";
+                  linkElement.className =
+                    "link-button block w-full py-3 px-4 rounded-lg font-medium text-center flex items-center justify-center";
+
+                  // If there's an icon, add it
+                  if (link.icon) {
+                    const icon = document.createElement("span");
+                    icon.className = "mr-2 flex-shrink-0";
+                    icon.innerHTML = link.icon;
+                    linkElement.appendChild(icon);
+                  }
+
+                  // Add title text
+                  const titleSpan = document.createElement("span");
+                  titleSpan.textContent = link.title;
+                  linkElement.appendChild(titleSpan);
+
+                  linksContainer.appendChild(linkElement);
+                });
+              }
+
+              categoryDiv.appendChild(linksContainer);
+
+              // Add divider between categories (except for the last one)
+              if (categoryIndex < data.categories.length - 1) {
+                const divider = document.createElement("hr");
+                divider.className = "category-divider my-6 border-0 h-px";
+                categoryDiv.appendChild(divider);
+              }
+
+              categoriesContainer.appendChild(categoryDiv);
+            });
+          }
+          // Fallback: Handle old structure with direct links array
+          else if (data.links && Array.isArray(data.links)) {
+            const linksContainer = document.createElement("div");
+            linksContainer.className = "space-y-3";
+
+            data.links.forEach((link) => {
+              const linkElement = document.createElement("a");
+              linkElement.href = link.url;
+              linkElement.target = "_blank";
+              linkElement.rel = "noopener noreferrer";
+              linkElement.className =
+                "link-button block w-full py-3 px-4 rounded-lg font-medium text-center flex items-center justify-center";
+
+              // If there's an icon, add it
+              if (link.icon) {
+                const icon = document.createElement("span");
+                icon.className = "mr-2 flex-shrink-0";
+                icon.innerHTML = link.icon;
+                linkElement.appendChild(icon);
+              }
+
+              // Add title text
+              const titleSpan = document.createElement("span");
+              titleSpan.textContent = link.title;
+              linkElement.appendChild(titleSpan);
+
+              linksContainer.appendChild(linkElement);
+            });
+
+            categoriesContainer.appendChild(linksContainer);
+          }
+        } catch (error) {
+          console.error("Error cargando los enlaces:", error);
+          const categoriesContainer = document.getElementById(
+            "categoriesContainer"
+          );
+          categoriesContainer.innerHTML =
+            '<p class="text-red-500">Error al cargar los enlaces. Verifica que el archivo links.json existe y es válido.</p>';
         }
-        
-        // Load links when document is ready
-        document.addEventListener('DOMContentLoaded', loadLinks);
+      }
+
+      // Load links when document is ready
+      document.addEventListener("DOMContentLoaded", loadLinks);
     </script>
-</body>
+  </body>
 </html>
