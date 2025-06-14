@@ -5,42 +5,119 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis Enlaces</title>
     <link rel="stylesheet" href="output.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">    <style id="dynamicStyles">
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
         }
+        /* Dynamic styles will be inserted here via JavaScript */
     </style>
 </head>
-<body class="bg-gradient-to-b from-gray-100 to-gray-200 min-h-screen py-10 px-4">
-    <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl mb-8">
+<body id="mainBody" class="min-h-screen py-10 px-4">
+    <div id="mainContainer" class="max-w-md mx-auto rounded-xl shadow-lg overflow-hidden md:max-w-2xl mb-8">
         <div class="p-8 text-center">
             <img id="profileImage" class="h-24 w-24 rounded-full mx-auto mb-4" src="https://via.placeholder.com/150" alt="Foto de perfil">
-            <h1 id="profileName" class="text-xl font-bold font-mono text-gray-800 mb-2">@Galaterro</h1>
-            <p id="profileDescription" class="text-sm text-gray-600 mb-6">Descripción breve</p>
+            <h1 id="profileName" class="text-xl font-bold font-mono mb-2">@Galaterro</h1>
+            <p id="profileDescription" class="text-sm mb-6">Descripción breve</p>
             
-            <div id="linksContainer" class="space-y-3">
-                <!-- Los enlaces se cargarán dinámicamente desde links.json -->
+            <div id="categoriesContainer">
+                <!-- Las categorías se cargarán dinámicamente desde links.json -->
             </div>
         </div>
-    </div>
-    
-    <footer class="text-center text-gray-500 text-xs">
+    </div>    
+    <footer id="footer" class="text-center text-xs">
         <p>© <span id="currentYear"></span></p>
-    </footer>
-
-    <script>
+    </footer>    <script>
         // Set current year in footer
         document.getElementById('currentYear').textContent = new Date().getFullYear();
         
-        // Función para cargar los enlaces desde el archivo JSON
+        // Function to apply dynamic theme colors
+        function applyTheme(theme) {
+            const dynamicStyles = document.getElementById('dynamicStyles');
+            const primaryColor = theme.primaryColor || '#1f2937';
+            const accentColor = theme.accentColor || '#3b82f6';
+            const textColor = theme.textColor || '#ffffff';
+            
+            // Calculate lighter and darker shades
+            const primaryColorLight = lightenColor(primaryColor, 20);
+            const accentColorHover = lightenColor(accentColor, 10);
+            const textColorMuted = lightenColor(textColor, -30);
+            
+            const css = `
+                body {
+                    font-family: 'Inter', sans-serif;
+                    background: linear-gradient(135deg, ${primaryColorLight} 0%, ${primaryColor} 100%);
+                }
+                
+                #mainContainer {
+                    background-color: ${primaryColor};
+                    border: 2px solid ${accentColor};
+                }
+                
+                #profileName {
+                    color: ${textColor};
+                }
+                
+                #profileDescription {
+                    color: ${textColorMuted};
+                }
+                
+                .category-title {
+                    color: ${accentColor};
+                    border-bottom: 2px solid ${accentColor};
+                }
+                
+                .category-divider {
+                    background-color: ${accentColor};
+                    opacity: 0.3;
+                }
+                
+                .link-button {
+                    background-color: ${accentColor};
+                    color: ${textColor};
+                    border: 1px solid ${accentColor};
+                    transition: all 0.3s ease;
+                }
+                
+                .link-button:hover {
+                    background-color: ${accentColorHover};
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                }
+                
+                #footer {
+                    color: ${textColorMuted};
+                }
+            `;
+            
+            dynamicStyles.innerHTML = css;
+        }
+        
+        // Function to lighten or darken a color
+        function lightenColor(color, amount) {
+            const usePound = color[0] === '#';
+            const col = usePound ? color.slice(1) : color;
+            const num = parseInt(col, 16);
+            let r = (num >> 16) + amount;
+            let g = (num >> 8 & 0x00FF) + amount;
+            let b = (num & 0x0000FF) + amount;
+            r = r > 255 ? 255 : r < 0 ? 0 : r;
+            g = g > 255 ? 255 : g < 0 ? 0 : g;
+            b = b > 255 ? 255 : b < 0 ? 0 : b;
+            return (usePound ? '#' : '') + (r << 16 | g << 8 | b).toString(16).padStart(6, '0');
+        }
+        
+        // Function to load links from JSON file
         async function loadLinks() {
             try {
                 const response = await fetch('links.json');
                 const data = await response.json();
                 
-                // Actualizar perfil
+                // Apply theme if available
+                if (data.theme) {
+                    applyTheme(data.theme);
+                }
+                
+                // Update profile
                 if (data.profile) {
                     document.getElementById('profileName').textContent = data.profile.name || 'Nombre';
                     document.getElementById('profileDescription').textContent = data.profile.description || 'Descripción breve';
@@ -49,37 +126,104 @@
                     }
                 }
                 
-                // Crear los enlaces
-                const linksContainer = document.getElementById('linksContainer');
+                // Create categories and links
+                const categoriesContainer = document.getElementById('categoriesContainer');
                 
-                if (data.links && Array.isArray(data.links)) {
+                // Handle new categories structure
+                if (data.categories && Array.isArray(data.categories)) {
+                    data.categories.forEach((category, categoryIndex) => {
+                        // Create category container
+                        const categoryDiv = document.createElement('div');
+                        categoryDiv.className = 'mb-8';
+                        
+                        // Create category title
+                        if (category.title) {
+                            const categoryTitle = document.createElement('h2');
+                            categoryTitle.className = 'category-title text-lg font-semibold mb-4 pb-2';
+                            categoryTitle.textContent = category.title;
+                            categoryDiv.appendChild(categoryTitle);
+                        }
+                        
+                        // Create links container for this category
+                        const linksContainer = document.createElement('div');
+                        linksContainer.className = 'space-y-3';
+                        
+                        // Create links for this category
+                        if (category.links && Array.isArray(category.links)) {
+                            category.links.forEach(link => {
+                                const linkElement = document.createElement('a');
+                                linkElement.href = link.url;
+                                linkElement.target = "_blank";
+                                linkElement.rel = "noopener noreferrer";
+                                linkElement.className = "link-button block w-full py-3 px-4 rounded-lg font-medium text-center flex items-center justify-center";
+                                
+                                // If there's an icon, add it
+                                if (link.icon) {
+                                    const icon = document.createElement('span');
+                                    icon.className = "mr-2 flex-shrink-0";
+                                    icon.innerHTML = link.icon;
+                                    linkElement.appendChild(icon);
+                                }
+                                
+                                // Add title text
+                                const titleSpan = document.createElement('span');
+                                titleSpan.textContent = link.title;
+                                linkElement.appendChild(titleSpan);
+                                
+                                linksContainer.appendChild(linkElement);
+                            });
+                        }
+                        
+                        categoryDiv.appendChild(linksContainer);
+                        
+                        // Add divider between categories (except for the last one)
+                        if (categoryIndex < data.categories.length - 1) {
+                            const divider = document.createElement('hr');
+                            divider.className = 'category-divider my-6 border-0 h-px';
+                            categoryDiv.appendChild(divider);
+                        }
+                        
+                        categoriesContainer.appendChild(categoryDiv);
+                    });
+                }
+                // Fallback: Handle old structure with direct links array
+                else if (data.links && Array.isArray(data.links)) {
+                    const linksContainer = document.createElement('div');
+                    linksContainer.className = 'space-y-3';
+                    
                     data.links.forEach(link => {
                         const linkElement = document.createElement('a');
                         linkElement.href = link.url;
                         linkElement.target = "_blank";
                         linkElement.rel = "noopener noreferrer";
-                        linkElement.className = "block w-full py-3 px-4 bg-gray-800 hover:bg-gray-700 transition-colors rounded-lg text-white font-medium text-center";
+                        linkElement.className = "link-button block w-full py-3 px-4 rounded-lg font-medium text-center flex items-center justify-center";
                         
-                        // Si hay un icono, añadirlo
+                        // If there's an icon, add it
                         if (link.icon) {
                             const icon = document.createElement('span');
-                            icon.className = "mr-2";
+                            icon.className = "mr-2 flex-shrink-0";
                             icon.innerHTML = link.icon;
-                            linkElement.prepend(icon);
+                            linkElement.appendChild(icon);
                         }
                         
-                        linkElement.appendChild(document.createTextNode(link.title));
+                        // Add title text
+                        const titleSpan = document.createElement('span');
+                        titleSpan.textContent = link.title;
+                        linkElement.appendChild(titleSpan);
+                        
                         linksContainer.appendChild(linkElement);
                     });
+                    
+                    categoriesContainer.appendChild(linksContainer);
                 }
             } catch (error) {
                 console.error('Error cargando los enlaces:', error);
-                const linksContainer = document.getElementById('linksContainer');
-                linksContainer.innerHTML = '<p class="text-red-500">Error al cargar los enlaces. Verifica que el archivo links.json existe y es válido.</p>';
+                const categoriesContainer = document.getElementById('categoriesContainer');
+                categoriesContainer.innerHTML = '<p class="text-red-500">Error al cargar los enlaces. Verifica que el archivo links.json existe y es válido.</p>';
             }
         }
         
-        // Cargar enlaces cuando el documento esté listo
+        // Load links when document is ready
         document.addEventListener('DOMContentLoaded', loadLinks);
     </script>
 </body>
