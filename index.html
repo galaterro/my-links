@@ -1,268 +1,549 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mis Enlaces</title>
+    <meta name="theme-color" content="#f3e4c4" />
+    <title>@Galaterro — Mis Enlaces</title>
+    <link rel="icon" type="image/webp" href="./assets/image.webp" />
     <link rel="stylesheet" href="output.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Bungee&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
       rel="stylesheet"
     />
-    <style id="dynamicStyles">
-      body {
-        font-family: "Inter", sans-serif;
+    <style id="dynamicStyles"></style>
+    <style>
+      :root {
+        --paper: #f3e4c4;
+        --paper-deep: #e6cf9c;
+        --cream: #fbf3df;
+        --ink: #1f1410;
+        --ink-soft: #4a342b;
+        --c1: #e85a2c;
+        --c2: #c8267a;
+        --c3: #f0a830;
+        --c4: #3a8c5f;
+        --c5: #b94a3c;
       }
-      /* Dynamic styles will be inserted here via JavaScript */
+
+      * { -webkit-font-smoothing: antialiased; }
+
+      html, body { background: var(--paper); }
+
+      body {
+        font-family: "Space Grotesk", system-ui, sans-serif;
+        color: var(--ink);
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+        background:
+          radial-gradient(circle at 18% 8%, rgba(232,90,44,0.18) 0%, transparent 42%),
+          radial-gradient(circle at 86% 92%, rgba(200,38,122,0.16) 0%, transparent 45%),
+          radial-gradient(circle at 50% 50%, var(--paper) 0%, var(--paper-deep) 100%);
+      }
+
+      /* Grain texture overlay */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 1;
+        opacity: 0.35;
+        mix-blend-mode: multiply;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.12  0 0 0 0 0.08  0 0 0 0 0.06  0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+      }
+
+      /* Decorative spinning vinyl in background */
+      .bg-vinyl {
+        position: fixed;
+        z-index: 0;
+        border-radius: 50%;
+        background:
+          radial-gradient(circle, var(--c2) 0 18px, var(--ink) 19px 22px, #2a1a14 23px 100%);
+        box-shadow: 0 0 0 1px rgba(0,0,0,0.4) inset;
+        opacity: 0.55;
+        animation: spin 28s linear infinite;
+      }
+      .bg-vinyl::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background:
+          repeating-radial-gradient(circle, rgba(255,255,255,0.04) 0 2px, transparent 2px 5px);
+      }
+      .bg-vinyl-1 { width: 460px; height: 460px; top: -200px; right: -180px; }
+      .bg-vinyl-2 { width: 360px; height: 360px; bottom: -160px; left: -160px; animation-direction: reverse; animation-duration: 36s; }
+
+      @keyframes spin { to { transform: rotate(360deg); } }
+
+      .stage {
+        position: relative;
+        z-index: 2;
+        max-width: 32rem;
+        margin: 0 auto;
+        padding: 2.5rem 1.25rem 2rem;
+      }
+
+      /* Sleeve = vinyl record sleeve card */
+      .sleeve {
+        position: relative;
+        background: var(--cream);
+        border: 2.5px solid var(--ink);
+        border-radius: 6px;
+        padding: 2rem 1.5rem 1.75rem;
+        box-shadow: 10px 10px 0 var(--ink);
+        transform: rotate(-0.4deg);
+      }
+      .sleeve::before {
+        content: "";
+        position: absolute;
+        top: 8px; left: 8px; right: 8px; bottom: 8px;
+        border: 1px dashed rgba(31,20,16,0.25);
+        border-radius: 3px;
+        pointer-events: none;
+      }
+
+      /* Top "tape" strip */
+      .stamp-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: "Space Mono", monospace;
+        font-size: 0.65rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+        margin-bottom: 1.25rem;
+      }
+      .stamp {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .stamp .dot {
+        width: 8px; height: 8px; border-radius: 50%;
+        background: var(--c1);
+        box-shadow: 0 0 0 2px rgba(232,90,44,0.25);
+      }
+
+      /* Vinyl profile */
+      .vinyl-wrap {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 1rem;
+      }
+      .vinyl {
+        position: relative;
+        width: 168px;
+        height: 168px;
+        border-radius: 50%;
+        background:
+          radial-gradient(circle, transparent 0 38px, var(--ink) 39px 100%);
+        box-shadow:
+          0 0 0 2px var(--ink),
+          0 8px 20px rgba(31,20,16,0.35);
+        animation: spin 18s linear infinite;
+      }
+      .vinyl::before {
+        content: "";
+        position: absolute;
+        inset: 6px;
+        border-radius: 50%;
+        background:
+          repeating-radial-gradient(circle, rgba(255,255,255,0.05) 0 2px, transparent 2px 6px);
+      }
+      .vinyl-label {
+        position: absolute;
+        inset: 50%;
+        width: 86px; height: 86px;
+        margin: -43px 0 0 -43px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 2px solid var(--ink);
+        background: var(--c1);
+      }
+      .vinyl-label img {
+        width: 100%; height: 100%; object-fit: cover;
+        display: block;
+      }
+      .vinyl-label::after {
+        content: "";
+        position: absolute;
+        top: 50%; left: 50%;
+        width: 8px; height: 8px;
+        margin: -4px 0 0 -4px;
+        background: var(--ink);
+        border-radius: 50%;
+        box-shadow: 0 0 0 3px var(--cream);
+      }
+
+      /* Identity */
+      .name {
+        font-family: "Abril Fatface", "DM Serif Display", Georgia, serif;
+        font-size: 2.5rem;
+        line-height: 1;
+        text-align: center;
+        color: var(--ink);
+        margin-top: 0.75rem;
+        letter-spacing: -0.01em;
+      }
+      .name .at { color: var(--c2); }
+      .tagline {
+        text-align: center;
+        font-family: "Space Mono", monospace;
+        font-size: 0.7rem;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+        margin-top: 0.5rem;
+      }
+      .description {
+        text-align: center;
+        font-size: 0.95rem;
+        color: var(--ink-soft);
+        margin-top: 0.5rem;
+        font-weight: 500;
+      }
+
+      /* Category headings — like tape labels */
+      .cat {
+        margin-top: 1.75rem;
+      }
+      .cat-head {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.9rem;
+      }
+      .cat-side {
+        font-family: "Bungee", system-ui, sans-serif;
+        font-size: 0.7rem;
+        letter-spacing: 0.05em;
+        background: var(--ink);
+        color: var(--cream);
+        padding: 4px 8px;
+        border-radius: 3px;
+        flex-shrink: 0;
+      }
+      .cat-title {
+        font-family: "Bungee", system-ui, sans-serif;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        color: var(--ink);
+        letter-spacing: 0.02em;
+      }
+      .cat-line {
+        flex: 1;
+        height: 2px;
+        background: var(--ink);
+        position: relative;
+      }
+      .cat-line::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 50%;
+        width: 8px; height: 8px;
+        margin-top: -4px;
+        border-radius: 50%;
+        background: var(--ink);
+      }
+
+      /* Link buttons — vinyl labels */
+      .links { display: flex; flex-direction: column; gap: 0.75rem; }
+      .link {
+        position: relative;
+        display: grid;
+        grid-template-columns: 44px 1fr auto;
+        align-items: center;
+        gap: 0.85rem;
+        padding: 0.85rem 1rem;
+        background: var(--cream);
+        border: 2px solid var(--ink);
+        border-radius: 4px;
+        text-decoration: none;
+        color: var(--ink);
+        font-weight: 600;
+        box-shadow: 4px 4px 0 var(--ink);
+        transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+        overflow: hidden;
+      }
+      .link::before {
+        content: "";
+        position: absolute;
+        top: 0; bottom: 0;
+        left: 0;
+        width: 6px;
+        background: var(--accent, var(--c1));
+      }
+      .link:nth-child(5n+1) { --accent: var(--c1); }
+      .link:nth-child(5n+2) { --accent: var(--c2); }
+      .link:nth-child(5n+3) { --accent: var(--c3); }
+      .link:nth-child(5n+4) { --accent: var(--c4); }
+      .link:nth-child(5n+5) { --accent: var(--c5); }
+
+      .link:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 6px 6px 0 var(--ink);
+        background: var(--accent);
+        color: var(--cream);
+      }
+      .link:hover .link-icon { background: var(--cream); color: var(--ink); }
+      .link:hover .link-sub { color: rgba(251,243,223,0.85); }
+      .link:hover .arrow { transform: translateX(3px); }
+      .link:active { transform: translate(0, 0); box-shadow: 2px 2px 0 var(--ink); }
+
+      .link-icon {
+        width: 40px; height: 40px;
+        display: flex; align-items: center; justify-content: center;
+        background: var(--accent);
+        color: var(--cream);
+        border-radius: 50%;
+        border: 2px solid var(--ink);
+        transition: background 160ms ease, color 160ms ease;
+      }
+      .link-icon svg { display: block; }
+
+      .link-body { display: flex; flex-direction: column; min-width: 0; }
+      .link-title {
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 700;
+        font-size: 1rem;
+        line-height: 1.15;
+        letter-spacing: -0.005em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .link-sub {
+        font-family: "Space Mono", monospace;
+        font-size: 0.7rem;
+        color: var(--ink-soft);
+        margin-top: 2px;
+        letter-spacing: 0.04em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: color 160ms ease;
+      }
+
+      .arrow {
+        flex-shrink: 0;
+        font-family: "Space Mono", monospace;
+        font-weight: 700;
+        transition: transform 160ms ease;
+      }
+
+      /* Footer */
+      .footer {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        margin-top: 1.5rem;
+        padding-bottom: 2rem;
+        font-family: "Space Mono", monospace;
+        font-size: 0.7rem;
+        color: var(--ink-soft);
+        letter-spacing: 0.06em;
+      }
+      .footer a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+      .footer .cassette {
+        display: inline-flex; align-items: center; gap: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+      .footer .cassette svg { display: block; }
+
+      @media (max-width: 380px) {
+        .name { font-size: 2.05rem; }
+        .vinyl { width: 144px; height: 144px; }
+        .vinyl-label { width: 74px; height: 74px; margin: -37px 0 0 -37px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .vinyl, .bg-vinyl { animation: none; }
+      }
     </style>
   </head>
-  <body id="mainBody" class="min-h-screen py-10 px-4">
-    <div
-      id="mainContainer"
-      class="max-w-md mx-auto rounded-xl shadow-lg overflow-hidden md:max-w-2xl mb-8"
-    >
-      <div class="p-8 text-center">
-        <img
-          id="profileImage"
-          class="h-24 w-24 rounded-full mx-auto mb-4"
-          src="https://via.placeholder.com/150"
-          alt="Foto de perfil"
-        />
-        <h1 id="profileName" class="text-xl font-bold font-mono mb-2">
-          @Galaterro
-        </h1>
-        <p id="profileDescription" class="text-sm mb-6">Descripción breve</p>
+  <body>
+    <div class="bg-vinyl bg-vinyl-1" aria-hidden="true"></div>
+    <div class="bg-vinyl bg-vinyl-2" aria-hidden="true"></div>
 
-        <div id="categoriesContainer">
-          <!-- Las categorías se cargarán dinámicamente desde links.json -->
+    <main class="stage">
+      <article class="sleeve" id="sleeve">
+        <div class="stamp-row">
+          <span class="stamp"><span class="dot"></span>33 1/3 RPM</span>
+          <span class="stamp"><span id="currentYear"></span></span>
         </div>
+
+        <div class="vinyl-wrap">
+          <div class="vinyl" aria-hidden="true">
+            <div class="vinyl-label">
+              <img id="profileImage" src="./assets/image.webp" alt="Foto de perfil" />
+            </div>
+          </div>
+        </div>
+
+        <h1 class="name" id="profileName">
+          <span class="at">@</span>Galaterro
+        </h1>
+        <p class="tagline" id="profileTagline">Side A · LP/2026</p>
+        <p class="description" id="profileDescription">Músico · Programador · Artista</p>
+
+        <div id="categoriesContainer"></div>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="cassette" aria-hidden="true">
+        <svg width="38" height="22" viewBox="0 0 38 22" fill="none">
+          <rect x="1" y="1" width="36" height="20" rx="3" fill="#fbf3df" stroke="#1f1410" stroke-width="2"/>
+          <circle cx="11" cy="11" r="3.5" fill="none" stroke="#1f1410" stroke-width="1.5"/>
+          <circle cx="27" cy="11" r="3.5" fill="none" stroke="#1f1410" stroke-width="1.5"/>
+          <circle cx="11" cy="11" r="1" fill="#1f1410"/>
+          <circle cx="27" cy="11" r="1" fill="#1f1410"/>
+          <line x1="14.5" y1="11" x2="23.5" y2="11" stroke="#1f1410" stroke-width="1"/>
+        </svg>
+        <span>B-Side</span>
       </div>
-    </div>
-    <footer id="footer" class="text-center text-xs">
       <p>
-        <a
-          href="https://github.com/galaterro/my-links"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center space-x-1 hover:opacity-80 transition-opacity text-xs"
-        >
-          © <span id="currentYear"></span> - Hecho con ❤️ por
-          <strong>Galaterro</strong>
+        ©&nbsp;<span id="footerYear"></span> ·
+        <a href="https://github.com/galaterro/my-links" target="_blank" rel="noopener noreferrer">
+          Hecho con ♥ por Galaterro
         </a>
       </p>
     </footer>
+
     <script>
-      // Set current year in footer
-      document.getElementById("currentYear").textContent =
-        new Date().getFullYear();
+      const year = new Date().getFullYear();
+      document.getElementById("currentYear").textContent = year;
+      document.getElementById("footerYear").textContent = year;
 
-      // Function to apply dynamic theme colors
       function applyTheme(theme) {
-        const dynamicStyles = document.getElementById("dynamicStyles");
-        const primaryColor = theme.primaryColor || "#1f2937";
-        const accentColor = theme.accentColor || "#3b82f6";
-        const textColor = theme.textColor || "#ffffff";
-
-        // Calculate lighter and darker shades
-        const primaryColorLight = lightenColor(primaryColor, 20);
-        const accentColorHover = lightenColor(accentColor, 10);
-        const textColorMuted = lightenColor(textColor, -30);
-
-        const css = `
-                body {
-                    font-family: 'Inter', sans-serif;
-                    background: linear-gradient(135deg, ${primaryColorLight} 0%, ${primaryColor} 100%);
-                }
-                
-                #mainContainer {
-                    background-color: ${primaryColor};
-                    border: 2px solid ${accentColor};
-                }
-                
-                #profileName {
-                    color: ${textColor};
-                }
-                
-                #profileDescription {
-                    color: ${textColorMuted};
-                }
-                
-                .category-title {
-                    color: ${accentColor};
-                    border-bottom: 2px solid ${accentColor};
-                }
-                
-                .category-divider {
-                    background-color: ${accentColor};
-                    opacity: 0.3;
-                }
-                
-                .link-button {
-                    background-color: ${accentColor};
-                    color: ${textColor};
-                    border: 1px solid ${accentColor};
-                    transition: all 0.3s ease;
-                }
-                
-                .link-button:hover {
-                    background-color: ${accentColorHover};
-                    transform: translateY(-2px);
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                }
-                
-                #footer {
-                    color: ${textColorMuted};
-                }
-            `;
-
-        dynamicStyles.innerHTML = css;
+        if (!theme) return;
+        const root = document.documentElement;
+        if (theme.paper) root.style.setProperty("--paper", theme.paper);
+        if (theme.cream) root.style.setProperty("--cream", theme.cream);
+        if (theme.ink) root.style.setProperty("--ink", theme.ink);
+        if (Array.isArray(theme.accents) && theme.accents.length >= 5) {
+          const [c1, c2, c3, c4, c5] = theme.accents;
+          root.style.setProperty("--c1", c1);
+          root.style.setProperty("--c2", c2);
+          root.style.setProperty("--c3", c3);
+          root.style.setProperty("--c4", c4);
+          root.style.setProperty("--c5", c5);
+        }
       }
 
-      // Function to lighten or darken a color
-      function lightenColor(color, amount) {
-        const usePound = color[0] === "#";
-        const col = usePound ? color.slice(1) : color;
-        const num = parseInt(col, 16);
-        let r = (num >> 16) + amount;
-        let g = ((num >> 8) & 0x00ff) + amount;
-        let b = (num & 0x0000ff) + amount;
-        r = r > 255 ? 255 : r < 0 ? 0 : r;
-        g = g > 255 ? 255 : g < 0 ? 0 : g;
-        b = b > 255 ? 255 : b < 0 ? 0 : b;
-        return (
-          (usePound ? "#" : "") +
-          ((r << 16) | (g << 8) | b).toString(16).padStart(6, "0")
-        );
+      function renderProfile(profile) {
+        if (!profile) return;
+        if (profile.name) {
+          const name = profile.name.startsWith("@")
+            ? `<span class="at">@</span>${profile.name.slice(1)}`
+            : profile.name;
+          document.getElementById("profileName").innerHTML = name;
+        }
+        if (profile.tagline) {
+          document.getElementById("profileTagline").textContent =
+            `${profile.tagline} · LP/${year}`;
+        } else {
+          document.getElementById("profileTagline").textContent = `LP/${year}`;
+        }
+        if (profile.description) {
+          document.getElementById("profileDescription").textContent = profile.description;
+        }
+        if (profile.image) {
+          document.getElementById("profileImage").src = profile.image;
+        }
       }
 
-      // Function to load links from JSON file
+      function renderCategories(categories) {
+        const container = document.getElementById("categoriesContainer");
+        container.innerHTML = "";
+        if (!Array.isArray(categories)) return;
+
+        categories.forEach((category, idx) => {
+          const section = document.createElement("section");
+          section.className = "cat";
+
+          if (category.title) {
+            const head = document.createElement("div");
+            head.className = "cat-head";
+
+            const side = document.createElement("span");
+            side.className = "cat-side";
+            side.textContent = category.side || String(idx + 1).padStart(2, "0");
+
+            const title = document.createElement("h2");
+            title.className = "cat-title";
+            title.textContent = category.title;
+
+            const line = document.createElement("span");
+            line.className = "cat-line";
+
+            head.append(side, title, line);
+            section.appendChild(head);
+          }
+
+          const list = document.createElement("div");
+          list.className = "links";
+
+          (category.links || []).forEach((link) => {
+            const a = document.createElement("a");
+            a.className = "link";
+            a.href = link.url;
+            a.target = "_blank";
+            a.rel = "noopener noreferrer";
+
+            const iconWrap = document.createElement("span");
+            iconWrap.className = "link-icon";
+            if (link.icon) iconWrap.innerHTML = link.icon;
+
+            const body = document.createElement("span");
+            body.className = "link-body";
+
+            const t = document.createElement("span");
+            t.className = "link-title";
+            t.textContent = link.title || "";
+            body.appendChild(t);
+
+            if (link.subtitle) {
+              const s = document.createElement("span");
+              s.className = "link-sub";
+              s.textContent = link.subtitle;
+              body.appendChild(s);
+            }
+
+            const arrow = document.createElement("span");
+            arrow.className = "arrow";
+            arrow.textContent = "↗";
+
+            a.append(iconWrap, body, arrow);
+            list.appendChild(a);
+          });
+
+          section.appendChild(list);
+          container.appendChild(section);
+        });
+      }
+
       async function loadLinks() {
         try {
           const response = await fetch("links.json");
           const data = await response.json();
-
-          // Apply theme if available
-          if (data.theme) {
-            applyTheme(data.theme);
-          }
-
-          // Update profile
-          if (data.profile) {
-            document.getElementById("profileName").textContent =
-              data.profile.name || "Nombre";
-            document.getElementById("profileDescription").textContent =
-              data.profile.description || "Descripción breve";
-            if (data.profile.image) {
-              document.getElementById("profileImage").src = data.profile.image;
-            }
-          }
-
-          // Create categories and links
-          const categoriesContainer = document.getElementById(
-            "categoriesContainer"
-          );
-
-          // Handle new categories structure
-          if (data.categories && Array.isArray(data.categories)) {
-            data.categories.forEach((category, categoryIndex) => {
-              // Create category container
-              const categoryDiv = document.createElement("div");
-              categoryDiv.className = "mb-8";
-
-              // Create category title
-              if (category.title) {
-                const categoryTitle = document.createElement("h2");
-                categoryTitle.className =
-                  "category-title text-lg font-semibold mb-4 pb-2";
-                categoryTitle.textContent = category.title;
-                categoryDiv.appendChild(categoryTitle);
-              }
-
-              // Create links container for this category
-              const linksContainer = document.createElement("div");
-              linksContainer.className = "space-y-3";
-
-              // Create links for this category
-              if (category.links && Array.isArray(category.links)) {
-                category.links.forEach((link) => {
-                  const linkElement = document.createElement("a");
-                  linkElement.href = link.url;
-                  linkElement.target = "_blank";
-                  linkElement.rel = "noopener noreferrer";
-                  linkElement.className =
-                    "link-button block w-full py-3 px-4 rounded-lg font-medium text-center flex items-center justify-center";
-
-                  // If there's an icon, add it
-                  if (link.icon) {
-                    const icon = document.createElement("span");
-                    icon.className = "mr-2 flex-shrink-0";
-                    icon.innerHTML = link.icon;
-                    linkElement.appendChild(icon);
-                  }
-
-                  // Add title text
-                  const titleSpan = document.createElement("span");
-                  titleSpan.textContent = link.title;
-                  linkElement.appendChild(titleSpan);
-
-                  linksContainer.appendChild(linkElement);
-                });
-              }
-
-              categoryDiv.appendChild(linksContainer);
-
-              // Add divider between categories (except for the last one)
-              if (categoryIndex < data.categories.length - 1) {
-                const divider = document.createElement("hr");
-                divider.className = "category-divider my-6 border-0 h-px";
-                categoryDiv.appendChild(divider);
-              }
-
-              categoriesContainer.appendChild(categoryDiv);
-            });
-          }
-          // Fallback: Handle old structure with direct links array
-          else if (data.links && Array.isArray(data.links)) {
-            const linksContainer = document.createElement("div");
-            linksContainer.className = "space-y-3";
-
-            data.links.forEach((link) => {
-              const linkElement = document.createElement("a");
-              linkElement.href = link.url;
-              linkElement.target = "_blank";
-              linkElement.rel = "noopener noreferrer";
-              linkElement.className =
-                "link-button block w-full py-3 px-4 rounded-lg font-medium text-center flex items-center justify-center";
-
-              // If there's an icon, add it
-              if (link.icon) {
-                const icon = document.createElement("span");
-                icon.className = "mr-2 flex-shrink-0";
-                icon.innerHTML = link.icon;
-                linkElement.appendChild(icon);
-              }
-
-              // Add title text
-              const titleSpan = document.createElement("span");
-              titleSpan.textContent = link.title;
-              linkElement.appendChild(titleSpan);
-
-              linksContainer.appendChild(linkElement);
-            });
-
-            categoriesContainer.appendChild(linksContainer);
-          }
+          applyTheme(data.theme);
+          renderProfile(data.profile);
+          renderCategories(data.categories);
         } catch (error) {
           console.error("Error cargando los enlaces:", error);
-          const categoriesContainer = document.getElementById(
-            "categoriesContainer"
-          );
-          categoriesContainer.innerHTML =
-            '<p class="text-red-500">Error al cargar los enlaces. Verifica que el archivo links.json existe y es válido.</p>';
+          document.getElementById("categoriesContainer").innerHTML =
+            '<p style="color:#b94a3c;margin-top:1rem;text-align:center;">Error al cargar los enlaces.</p>';
         }
       }
 
-      // Load links when document is ready
       document.addEventListener("DOMContentLoaded", loadLinks);
     </script>
   </body>
