@@ -1,0 +1,4 @@
+# Redirecciones de Netlify — https://docs.netlify.com/routing/redirects/
+# /single siempre apunta al último single publicado (302 = temporal, cambiará con cada lanzamiento)
+
+/single  https://open.spotify.com/track/195wDP025XEOS2abZb0W9i?si=lUoLNkHXRHOGDHNp9I5nQg&utm_source=signal  302
