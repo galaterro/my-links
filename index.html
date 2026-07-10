@@ -338,6 +338,28 @@
         transition: transform 160ms ease;
       }
 
+      /* "New" badge — blinking sticker */
+      .link.has-badge { grid-template-columns: 44px 1fr auto auto; }
+      .link-badge {
+        flex-shrink: 0;
+        font-family: "Space Mono", monospace;
+        font-size: 0.6rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        background: var(--c3);
+        color: var(--ink);
+        border: 2px solid var(--ink);
+        border-radius: 999px;
+        padding: 2px 8px;
+        animation: badge-fade 2s ease-in-out infinite;
+      }
+
+      @keyframes badge-fade {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.35; }
+      }
+
       /* Footer */
       .footer {
         position: relative;
@@ -364,7 +386,7 @@
       }
 
       @media (prefers-reduced-motion: reduce) {
-        .vinyl, .bg-vinyl { animation: none; }
+        .vinyl, .bg-vinyl, .link-badge { animation: none; }
       }
     </style>
   </head>
@@ -521,7 +543,15 @@
             arrow.className = "arrow";
             arrow.textContent = "↗";
 
-            a.append(iconWrap, body, arrow);
+            if (link.badge) {
+              a.classList.add("has-badge");
+              const badge = document.createElement("span");
+              badge.className = "link-badge";
+              badge.textContent = link.badge;
+              a.append(iconWrap, body, badge, arrow);
+            } else {
+              a.append(iconWrap, body, arrow);
+            }
             list.appendChild(a);
           });
 
